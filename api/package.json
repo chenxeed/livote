@@ -1,0 +1,33 @@
+{
+  "name": "livote-api",
+  "version": "1.0.0",
+  "description": "API service for livote",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:chenxeed/livote"
+  },
+  "keywords": [
+    "live",
+    "voting",
+    "api",
+    "livote"
+  ],
+  "author": "Albert ChenXeed",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
