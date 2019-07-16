@@ -8,8 +8,8 @@ const ServiceAuth = require('../services/auth')
 const router = express.Router()
 
 // App Script
-router.post('/signup', async (req, res) => {
-   bcrypt.hash(req.body.password, 10, async (error, hash) => {
+router.post('/signup', ServiceAuth.mustNotLogin, async (req, res) => {
+  bcrypt.hash(req.body.password, 10, async (error, hash) => {
     // error if hashing password failed
     if(error) {
       return res.status(500).json({
@@ -43,7 +43,7 @@ router.post('/signup', async (req, res) => {
    })
 })
 
-router.post('/signin', async (req, res) => {
+router.post('/signin', ServiceAuth.mustNotLogin, async (req, res) => {
   try {
     const user = await ModelUser.findOne({ email: req.body.email }).exec()
     bcrypt.compare(req.body.password, user.password, (error, result) => {
