@@ -26,7 +26,7 @@ router.post('/create', ServiceAuth.getUserAuth(true), async (req, res) => {
       description: req.body.description,
       creator: user._id,
       lists: req.body.lists.map(list => ({
-        id: new mongoose.Types.ObjectId(),
+        _id: new mongoose.Types.ObjectId(),
         title: list.title,
         description: list.description
       }))
