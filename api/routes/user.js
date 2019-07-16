@@ -31,11 +31,11 @@ router.post('/signup', ServiceAuth.mustNotLogin, async (req, res) => {
       })
       try {
         await user.save()
-        res.status(200).json({
+        return res.status(200).json({
           success: 'New user has been created'
         })
       } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             error
         })
       }
@@ -60,7 +60,7 @@ router.post('/signin', ServiceAuth.mustNotLogin, async (req, res) => {
       }
     })
   } catch (error) {
-    res.status(401).json({
+    return res.status(401).json({
       failed: 'Authentication failed'
     })
   }

@@ -7,7 +7,7 @@ const vote = mongoose.Schema({
    title: {type: String, required: true},
    description: {type: String, required: false},
    creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-   list: [{
+   lists: [{
      _id: mongoose.Schema.Types.ObjectId,
      title: {type: String, required: true},
      description: {type: String, required: false}
