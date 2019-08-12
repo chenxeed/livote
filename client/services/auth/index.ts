@@ -9,5 +9,9 @@ export const submitLogin = ({ email, password }: LoginProps) => {
   return axios.post(`${serverUrl}/user/signin`, {
     email,
     password
+  }, {
+    headers: {
+      'content-type': 'application/json'
+    }
   })
 }
