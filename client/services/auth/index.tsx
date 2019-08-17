@@ -7,7 +7,7 @@ interface UserData {
 }
 
 interface AuthContextValue {
-  user: UserData | null,
+  user: UserData,
   setUser: Dispatch<SetStateAction<UserData>> | null
 }
 
@@ -19,7 +19,9 @@ interface LoginProps {
 const authTokenKey = 'notsoobviousbutyouknowit'
 
 export const AuthContext = createContext<AuthContextValue>({
-  user: null,
+  user: {
+    email: ''
+  },
   setUser: null
 })
 
@@ -40,6 +42,7 @@ export const AuthProvider: FunctionComponent = ({
 
 export const useAuth = () => {
   const {user, setUser} = useContext(AuthContext)
+  const isLogin = user && user.email
 
   async function login ({ email, password }: LoginProps) {
     const response = await axios.post(`${serverUrl}/user/signin`, {
@@ -80,6 +83,7 @@ export const useAuth = () => {
 
   return {
     user,
+    isLogin,
     login,
     verify
   }

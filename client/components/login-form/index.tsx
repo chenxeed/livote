@@ -4,7 +4,7 @@ import { useAuth } from '../../services/auth'
 export const LoginForm: FunctionComponent = () => {
   
   const [isInvalid, setIsInvalid] = useState(false)
-  const { login, user } = useAuth()
+  const { login } = useAuth()
 
   async function onSubmitForm (e: FormEvent<HTMLFormElement>) {
     e.preventDefault()

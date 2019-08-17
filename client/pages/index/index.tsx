@@ -13,20 +13,14 @@ const Home: FunctionComponent = () => {
 }
 
 const HomeContent: FunctionComponent = () => {
-  const { user, verify } = useAuth()
+  const { user, isLogin, verify } = useAuth()
 
   useEffect(() => {
     void verify()
   }, [])
 
   return <div className="w-full h-full max-w-xs flex items-center mx-auto">
-    <div>
-      get user? {user && user.email}
-    </div>
-    { (user && user.email)
-      ? 'You are login'
-      : <LoginForm />
-    }
+    { isLogin ? `Welcome, ${user.email}` : <LoginForm /> }
   </div>
 
 }
