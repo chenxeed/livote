@@ -1,9 +1,10 @@
 import { FunctionComponent, FormEvent, useState } from 'react'
-import { submitLogin } from '../../services/auth'
+import { useAuth } from '../../services/auth'
 
 export const LoginForm: FunctionComponent = () => {
   
   const [isInvalid, setIsInvalid] = useState(false)
+  const { login, user } = useAuth()
 
   async function onSubmitForm (e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -17,8 +18,7 @@ export const LoginForm: FunctionComponent = () => {
     const password = passwordForm.value
     // call the API to submit the login
     try {
-      const token = await submitLogin({ email, password })
-      console.log(token)
+      await login({ email, password })
     } catch (e) {
       setIsInvalid(true)
     }
