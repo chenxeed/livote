@@ -66,5 +66,22 @@ router.post('/signin', ServiceAuth.mustNotLogin, async (req, res) => {
   }
 })
 
+router.get('/verify-auth', ServiceAuth.getUserAuth(false), async (req, res) => {
+  const user = req.user
+  console.log('mana user', user)
+  if (user) {
+    return res.status(200).json({
+      success: 'Authentication verified',
+      user: {
+        email: user.email
+      }
+    })
+  } else {
+    return res.status(401).json({
+      failed: 'Authentication failed'
+    })
+  }
+})
+
 // Module Export
 module.exports = router

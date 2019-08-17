@@ -25,7 +25,7 @@ async function verifyRequestAuth(req) {
         if (error) {
           reject(error)
         } else {
-          resolve(payload.id)
+          resolve(payload)
         }
       })
     }
@@ -34,8 +34,8 @@ async function verifyRequestAuth(req) {
 
 async function mustNotLogin(req, res, next) {
   try {
-    const id = await verifyRequestAuth(req)
-    const user = ModelUser.findById(id)
+    const { id } = await verifyRequestAuth(req)
+    const user = await ModelUser.findById(id).exec()
     if (user) {
       return res.status(403).json({
         error: 'user already login'
@@ -51,8 +51,8 @@ async function mustNotLogin(req, res, next) {
 function getUserAuth(mustLogin = false) {
   return async (req, res, next) => {
     try {
-      const id = await verifyRequestAuth(req)
-      const user = ModelUser.findById(id)
+      const { id } = await verifyRequestAuth(req)
+      const user = await ModelUser.findById(id).exec()
       if (mustLogin && !user) {
         return res.status(403).json({
           error: 'user must login'
