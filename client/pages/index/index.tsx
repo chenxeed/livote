@@ -3,16 +3,16 @@ import { LayoutGeneral } from '../../layout/general'
 import { LoginForm } from '../../components/login-form'
 import { AuthProvider, useAuth } from '../../services/auth'
 
-const Home: FunctionComponent = () => {
+const PageWrapper: FunctionComponent = () => {
 
   return <AuthProvider>
     <LayoutGeneral>
-      <HomeContent/>
+      <PageContent/>
     </LayoutGeneral>
   </AuthProvider>
 }
 
-const HomeContent: FunctionComponent = () => {
+const PageContent: FunctionComponent = () => {
   const { user, isLogin, verify } = useAuth()
 
   useEffect(() => {
@@ -20,9 +20,24 @@ const HomeContent: FunctionComponent = () => {
   }, [])
 
   return <div className="w-full h-full max-w-xs flex items-center mx-auto">
-    { isLogin ? `Welcome, ${user.email}` : <LoginForm /> }
+    { isLogin
+        ? <div className="rounded shadow px-6 py-4">
+            <div className="text-md mb-2">
+              Welcome, {` `} 
+              <span className="font-bold">{ user.email }</span>
+            </div>
+            <ul className="flex">
+              <li className="mr-6">
+                <a
+                  className="text-blue-500 hover:text-blue-800"
+                  href="/votes">Votes</a>
+              </li>
+            </ul>
+          </div>
+        : <LoginForm />
+    }
   </div>
 
 }
 
-export default Home
+export default PageWrapper
