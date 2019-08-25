@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:unit": "jest --config=jest.config.js"
   },
   "browserslist": [
     "> 1%",
@@ -18,23 +19,31 @@
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.19.0",
+    "flush-promises": "^1.0.2",
     "next": "^9.0.2",
     "node-sass": "^4.12.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "sinon": "^7.4.1",
     "tailwindcss": "^1.0.6"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
+    "@types/jest": "^24.0.17",
     "@types/node": "^12.6.8",
-    "@types/react": "^16.8.23",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.8.5",
+    "@types/react-test-renderer": "^16.9.0",
+    "@types/sinon": "^7.0.13",
     "@zeit/next-css": "^1.0.1",
     "autoprefixer": "^9.6.1",
     "dotenv-webpack": "^1.7.0",
     "fork-ts-checker-webpack-plugin": "^1.4.3",
+    "jest": "^24.9.0",
     "postcss-css-variables": "^0.13.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-import": "^12.0.1",
+    "react-test-renderer": "^16.9.0",
     "typescript": "^3.5.3"
   }
 }
