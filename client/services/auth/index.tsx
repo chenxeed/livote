@@ -18,7 +18,7 @@ interface LoginProps {
 
 const authTokenKey = 'notsoobviousbutyouknowit'
 
-export const AuthContext = createContext<AuthContextValue>({
+const AuthContext = createContext<AuthContextValue>({
   user: {
     email: ''
   },
@@ -45,10 +45,13 @@ export const useAuth = () => {
   const isLogin = user && user.email
 
   async function login ({ email, password }: LoginProps) {
-    const response = await axios.post(`${serverUrl}/user/signin`, {
-      email,
-      password
-    }, {
+    const response = await axios({
+      method: 'POST',
+      url: `${serverUrl}/user/signin`,
+      data: {
+        email,
+        password
+      },
       headers: {
         'content-type': 'application/json'
       }
