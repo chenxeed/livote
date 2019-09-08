@@ -17,7 +17,28 @@ registerResponse(
     { 'Content-Type': CONTENT_TYPE.JSON },
     JSON.stringify({
       success: 'Authentication success',
-      token: 'newJWTforyou'
+      token: CONSTANTS.authToken
+    })
+  ]
+)
+
+// user/verify-auth
+registerResponse(
+  {
+    url: `${serverUrl}/user/verify-auth`,
+    method: 'GET',
+    headers: {
+      authorization: CONSTANTS.authToken
+    }
+  },
+  [
+    200,
+    { 'Content-Type': CONTENT_TYPE.JSON },
+    JSON.stringify({
+      success: 'Authentication verified',
+      user: {
+        email: CONSTANTS.email
+      }
     })
   ]
 )

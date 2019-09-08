@@ -60,4 +60,57 @@ describe('ServiceAuth', () => {
     done()
   })
 
+  it('should be able to verify and success if there is token session', async done => {
+    // SETUP
+    // prepare the child component as the consumer of AuthProvider
+    const Child: FunctionComponent = () => {
+      const { user, verify } = useAuth()
+      const doVerify = () => {
+        verify()
+      }
+      return <div>
+        <div id="user">{JSON.stringify(user)}</div>
+        <button id="verify" onClick={ doVerify } >Verify</button>
+      </div>
+    }
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    // mock sessionStorage used to store tokens
+    sessionStorage.setItem('notsoobviousbutyouknowit', CONSTANT.authToken)
+    // ACTION
+    // render the component
+    act(() => {
+      render(
+        <AuthProvider>
+          <Child/>
+        </AuthProvider>
+      , container)
+    })
+    // ASSERT
+    // check if the user email is empty first
+    const user = container.querySelector('#user')
+    expect(user && user.innerHTML).toEqual(JSON.stringify({
+      email: ''
+    }))
+    // ACTION
+    // trigger verify
+    // note: There is TSlint error now, althought it was
+    // suggested here to use `async callback` here:
+    // https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#async-act-for-testing
+    await act(async () => {
+      const verifyButton = container.querySelector<HTMLButtonElement>('#verify')
+      verifyButton && verifyButton.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+    })
+    await flushPromises()
+    // ASSERT
+    // check if the user logged-in and user data exist now
+    expect(user && user.innerHTML).toEqual(JSON.stringify({
+      email: CONSTANT.email
+    }))
+
+    // CLEANUP
+    sessionStorage.clear()
+    done()    
+  })
+
 })

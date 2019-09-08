@@ -52,6 +52,7 @@ export const useAuth = () => {
         email,
         password
       },
+      responseType: 'json',
       headers: {
         'content-type': 'application/json'
       }
@@ -66,8 +67,12 @@ export const useAuth = () => {
   async function verify () {
     const token = getToken()
     try {
-      const response = await axios.get(`${serverUrl}/user/verify-auth`, {
+      const response = await axios({
+        method: 'GET',
+        url: `${serverUrl}/user/verify-auth`,
+        responseType: 'json',
         headers: {
+          'content-type': 'application/json',
           'authorization': token
         }
       })
