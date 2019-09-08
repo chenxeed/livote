@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react'
 import { render } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import flushPromises from 'flush-promises'
-
+import CONSTANT from '../../tests/mocks/constants' 
 import { AuthProvider, useAuth } from '.'
 
 describe('ServiceAuth', () => {
@@ -10,7 +10,10 @@ describe('ServiceAuth', () => {
   it('should be able to login and get user detail', async done => {
     // SETUP
     // prepare the child component as the consumer of AuthProvider
-    const testAuth = { email: 'test@email.com', password: '123456' }
+    const testAuth = {
+      email: CONSTANT.email,
+      password: CONSTANT.password
+    }
     const Child: FunctionComponent = () => {
       const { user, login } = useAuth()
       const doLogin = () => {

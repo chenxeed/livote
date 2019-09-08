@@ -1,14 +1,15 @@
 import { serverUrl } from '../../../services'
 import { registerResponse, CONTENT_TYPE } from './fake-server'
+import CONSTANTS from '../constants'
 
-// user/login
+// user/signin
 registerResponse(
   {
     url: `${serverUrl}/user/signin`,
     method: 'POST',
     data: {
-      email: 'test@email.com',
-      password: '123456'
+      email: CONSTANTS.email,
+      password: CONSTANTS.password
     }
   },
   [
