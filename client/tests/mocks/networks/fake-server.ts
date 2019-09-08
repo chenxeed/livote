@@ -25,7 +25,15 @@ fakeServer.respondWith(request => {
   const axiosRequest: AxiosRequestConfig = {
     url: request.url,
     method: request.method as AxiosRequestConfig['method'],
-    data: JSON.parse(request.requestBody)
+  }
+  if (request.requestBody) {
+    axiosRequest.data = JSON.parse(request.requestBody)
+  }
+  // check authorization header if exist
+  if (request.requestHeaders.authorization) {
+    axiosRequest.headers = {
+      authorization: request.requestHeaders.authorization
+    }
   }
   const response = responseByUrl[JSON.stringify(axiosRequest)]
   
