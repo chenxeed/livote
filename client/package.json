@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "node server/index.js",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server/index.js",
     "test:unit": "jest --config=jest.config.js"
   },
   "browserslist": [
@@ -19,6 +19,9 @@
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
     "flush-promises": "^1.0.2",
     "next": "^9.0.2",
     "node-sass": "^4.12.0",
