@@ -14,9 +14,9 @@ const PageWrapper: FunctionComponent = () => {
 
 const PageContent: FunctionComponent = () => {
   const { user, isLogin, verify } = useAuth()
-
+  // Verify the user login on load
   useEffect(() => {
-    void verify()
+    verify()
   }, [])
 
   return <div className="w-full h-full max-w-xs flex items-center mx-auto">

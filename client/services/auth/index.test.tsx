@@ -46,6 +46,7 @@ describe('ServiceAuth', () => {
     // note: There is TSlint error now, althought it was
     // suggested here to use `async callback` here:
     // https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#async-act-for-testing
+    // @ts-ignore
     await act(async () => {
       const loginButton = container.querySelector<HTMLButtonElement>('#login')
       loginButton && loginButton.dispatchEvent(new MouseEvent('click', {bubbles: true}))
@@ -97,6 +98,7 @@ describe('ServiceAuth', () => {
     // note: There is TSlint error now, althought it was
     // suggested here to use `async callback` here:
     // https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#async-act-for-testing
+    // @ts-ignore
     await act(async () => {
       const verifyButton = container.querySelector<HTMLButtonElement>('#verify')
       verifyButton && verifyButton.dispatchEvent(new MouseEvent('click', {bubbles: true}))
