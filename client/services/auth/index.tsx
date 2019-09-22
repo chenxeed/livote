@@ -89,16 +89,32 @@ export const useAuth = () => {
     }
   }
 
+  async function logout () {
+    // Based on this article, JWT token cannot be manually set to expire
+    // on the server, so we just have to clear the client side authentication.
+    // https://medium.com/devgorilla/how-to-log-out-when-using-jwt-a8c7823e8a6
+    clearToken()
+    setUser && setUser({
+      email: ''
+    })
+    return true
+  }
+
   return {
     user,
     isLogin,
     login,
+    logout,
     verify
   }
 }
 
 function setToken (token: string) {
   window.sessionStorage.setItem(authTokenKey, token)
+}
+
+function clearToken () {
+  window.sessionStorage.removeItem(authTokenKey)
 }
 
 function getToken () {

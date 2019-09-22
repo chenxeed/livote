@@ -1,8 +1,20 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, Fragment } from 'react'
+import Head from 'next/head'
+
 import './style.scss'
 
-export const LayoutGeneral: FunctionComponent = props => {
-  return <div className="container mx-auto h-full">
-      {props.children}
-  </div>
+interface LayoutGeneralProps {
+  header?: JSX.Element
+}
+
+export const LayoutGeneral: FunctionComponent<LayoutGeneralProps> = props => {
+  return <Fragment>
+    <Head>
+      <title>Livote App</title>
+    </Head>
+    <div className="container mx-auto h-full">
+        {props.header}
+        {props.children}
+    </div>
+  </Fragment>
 }

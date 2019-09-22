@@ -1,12 +1,13 @@
 import { FunctionComponent, useEffect } from 'react'
 import { LayoutGeneral } from '../../layout/general'
+import { LayoutHeader } from '../../layout/header'
 import { LoginForm } from '../../components/login-form'
 import { AuthProvider, useAuth } from '../../services/auth'
 
 const PageWrapper: FunctionComponent = () => {
 
   return <AuthProvider>
-    <LayoutGeneral>
+    <LayoutGeneral header={ <LayoutHeader/> }>
       <PageContent/>
     </LayoutGeneral>
   </AuthProvider>
@@ -24,15 +25,9 @@ const PageContent: FunctionComponent = () => {
         ? <div className="rounded shadow px-6 py-4">
             <div className="text-md mb-2">
               Welcome, {` `} 
-              <span className="font-bold">{ user.email }</span>
+              <span className="font-bold">{ user.email }</span>.
+              Please navigate from header menu.
             </div>
-            <ul className="flex">
-              <li className="mr-6">
-                <a
-                  className="text-blue-500 hover:text-blue-800"
-                  href="/votes">Votes</a>
-              </li>
-            </ul>
           </div>
         : <LoginForm />
     }
