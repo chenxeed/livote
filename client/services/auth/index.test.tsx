@@ -118,7 +118,9 @@ describe('ServiceAuth', () => {
     // ACTION
     // trigger the verify
     const checkAuth = await verify(ctx)
-    retrievedUser = checkAuth && checkAuth.user
+    if (checkAuth) {
+      retrievedUser = checkAuth.user
+    }
     // trigger postVerify to store user data into user state
     // note: There is TSlint error now, althought it was
     // suggested here to use `async callback` here:

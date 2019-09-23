@@ -5,8 +5,12 @@ interface LoginParam {
   email: string,
   password: string
 }
+interface LoginResponse {
+  success: string,
+  token: string
+}
 export const reqLogin = ({ email, password }: LoginParam) => {
-  return axios({
+  return axios.request<LoginResponse>({
     method: 'POST',
     url: `${serverUrl}/user/signin`,
     data: {
@@ -20,8 +24,14 @@ export const reqLogin = ({ email, password }: LoginParam) => {
   })
 }
 
+interface VerifyResponse {
+  success: string;
+  user: {
+    email: string
+  }
+}
 export const reqVerify = (token: string) => {
-  return axios({
+  const request = axios.request<VerifyResponse>({
     method: 'GET',
     url: `${serverUrl}/user/verify-auth`,
     responseType: 'json',
@@ -29,5 +39,6 @@ export const reqVerify = (token: string) => {
       'content-type': 'application/json',
       'authorization': token
     }
-  })  
+  })
+  return request
 }
