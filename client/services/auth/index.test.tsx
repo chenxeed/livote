@@ -3,7 +3,20 @@ import { render } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import flushPromises from 'flush-promises'
 import CONSTANT from '../../tests/mocks/constants' 
-import { AuthProvider, useAuth } from '.'
+import { AuthProvider, useAuth, verify } from '.'
+import { NextPageContext } from 'next'
+
+jest.mock('next-cookies', () => {
+  const CONSTANT = require('../../tests/mocks/constants').default
+  const authTokenKey = require('../').authTokenKey
+  const fakeToken = {
+    [authTokenKey]: CONSTANT.authToken
+  }
+  
+  return () => {
+    return fakeToken
+  }
+})
 
 describe('ServiceAuth', () => {
 
@@ -57,17 +70,24 @@ describe('ServiceAuth', () => {
     expect(user && user.innerHTML).toEqual(JSON.stringify({
       email: testAuth.email
     }))
-
+    
+    // CLEANUP
     done()
   })
 
+  // WIP after confirming the verification flow
   it('should be able to verify and success if there is token session', async done => {
     // SETUP
     // prepare the child component as the consumer of AuthProvider
+    let retrievedUser = {
+      email: ''
+    }
     const Child: FunctionComponent = () => {
-      const { user, verify } = useAuth()
+      const { user, postVerify } = useAuth()
       const doVerify = () => {
-        verify()
+        postVerify({
+          email: retrievedUser.email
+        })
       }
       return <div>
         <div id="user">{JSON.stringify(user)}</div>
@@ -76,8 +96,10 @@ describe('ServiceAuth', () => {
     }
     const container = document.createElement('div')
     document.body.appendChild(container)
-    // mock sessionStorage used to store tokens
-    sessionStorage.setItem('notsoobviousbutyouknowit', CONSTANT.authToken)
+    const ctx: NextPageContext = {
+      pathname: 'anyurl',
+      query: {}
+    }
     // ACTION
     // render the component
     act(() => {
@@ -94,7 +116,10 @@ describe('ServiceAuth', () => {
       email: ''
     }))
     // ACTION
-    // trigger verify
+    // trigger the verify
+    const checkAuth = await verify(ctx)
+    retrievedUser = checkAuth && checkAuth.user
+    // trigger postVerify to store user data into user state
     // note: There is TSlint error now, althought it was
     // suggested here to use `async callback` here:
     // https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#async-act-for-testing
@@ -111,7 +136,6 @@ describe('ServiceAuth', () => {
     }))
 
     // CLEANUP
-    sessionStorage.clear()
     done()    
   })
 

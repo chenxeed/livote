@@ -1,23 +1,29 @@
-import { FunctionComponent, useEffect } from 'react'
+import { NextPage } from 'next'
+import { useEffect } from 'react'
 import { LayoutGeneral } from '../../layout/general'
 import { LayoutHeader } from '../../layout/header'
 import { LoginForm } from '../../components/login-form'
-import { AuthProvider, useAuth } from '../../services/auth'
+import { AuthProvider, useAuth, verify } from '../../services/auth'
 
-const PageWrapper: FunctionComponent = () => {
+interface HomePageProps {
+  user: any
+}
+const PageWrapper: NextPage<HomePageProps> = props => {
 
   return <AuthProvider>
     <LayoutGeneral header={ <LayoutHeader/> }>
-      <PageContent/>
+      <PageContent user={ props.user } />
     </LayoutGeneral>
   </AuthProvider>
 }
 
-const PageContent: FunctionComponent = () => {
-  const { user, isLogin, verify } = useAuth()
-  // Verify the user login on load
+const PageContent: NextPage<HomePageProps> = props => {
+  const { user, isLogin, postVerify } = useAuth()
+
   useEffect(() => {
-    verify()
+    if (props.user) {
+      postVerify(props.user)
+    }
   }, [])
 
   return <div className="w-full h-full max-w-xs flex items-center mx-auto">
@@ -33,6 +39,13 @@ const PageContent: FunctionComponent = () => {
     }
   </div>
 
+}
+
+PageWrapper.getInitialProps = async ctx => {
+  const checkAuth = await verify(ctx)
+  return {
+    user: checkAuth ? checkAuth.user : null
+  }
 }
 
 export default PageWrapper

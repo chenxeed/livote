@@ -1,6 +1,9 @@
-import { serverUrl } from '..'
-import axios from 'axios'
 import { createContext, useContext, useState, FunctionComponent, Dispatch, SetStateAction } from 'react'
+import { NextPageContext } from 'next'
+import nextCookie from 'next-cookies'
+import cookie from 'js-cookie'
+import { reqLogin, reqVerify } from './api'
+import { authTokenKey } from '../'
 
 interface UserData {
   email: string
@@ -15,8 +18,6 @@ interface LoginProps {
   email: string;
   password: string;
 }
-
-const authTokenKey = 'notsoobviousbutyouknowit'
 
 const AuthContext = createContext<AuthContextValue>({
   user: {
@@ -42,21 +43,10 @@ export const AuthProvider: FunctionComponent = ({
 
 export const useAuth = () => {
   const {user, setUser} = useContext(AuthContext)
-  const isLogin = user && user.email
+  const isLogin = Boolean(user && user.email)
 
   async function login ({ email, password }: LoginProps) {
-    const response = await axios({
-      method: 'POST',
-      url: `${serverUrl}/user/signin`,
-      data: {
-        email,
-        password
-      },
-      responseType: 'json',
-      headers: {
-        'content-type': 'application/json'
-      }
-    })
+    const response = await reqLogin({ email, password })
     const token = response.data.token
     setToken(token)
     setUser && setUser({
@@ -64,29 +54,10 @@ export const useAuth = () => {
     })
   }
 
-  async function verify () {
-    const token = getToken()
-    try {
-      const response = await axios({
-        method: 'GET',
-        url: `${serverUrl}/user/verify-auth`,
-        responseType: 'json',
-        headers: {
-          'content-type': 'application/json',
-          'authorization': token
-        }
-      })
-      const user = response.data.user
-      setUser && setUser({
-        email: user.email
-      })
-      return true
-    } catch (e) {
-      setUser && setUser({
-        email: ''
-      })
-      return false
-    }
+  async function postVerify (user: UserData) {
+    setUser && setUser({
+      email: user.email
+    })
   }
 
   async function logout () {
@@ -105,18 +76,37 @@ export const useAuth = () => {
     isLogin,
     login,
     logout,
-    verify
+    postVerify
+  }
+}
+
+export async function verify (ctx: NextPageContext) {
+  const token = getToken(ctx)
+  if (token) {
+    try {
+      const response = await reqVerify(token)
+      const user = response.data.user
+      return {
+        user
+      }
+    } catch(e) {
+      return false
+    }
+  } else {
+    return false
   }
 }
 
 function setToken (token: string) {
-  window.sessionStorage.setItem(authTokenKey, token)
+  cookie.set(authTokenKey, token, {
+    expires: 1
+  })
 }
 
 function clearToken () {
-  window.sessionStorage.removeItem(authTokenKey)
+  cookie.remove(authTokenKey)
 }
 
-function getToken () {
-  return window.sessionStorage.getItem(authTokenKey)
+function getToken (ctx: NextPageContext) {
+  return nextCookie(ctx)[authTokenKey]
 }
