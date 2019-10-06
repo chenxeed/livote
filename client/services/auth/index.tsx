@@ -2,10 +2,10 @@ import { createContext, useContext, useState, FunctionComponent, Dispatch, SetSt
 import { NextPageContext } from 'next'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
-import { reqLogin, reqVerify } from './api'
+import { reqLogin, reqVerify, reqSignUp } from './api'
 import { authTokenKey } from '../'
 
-interface UserData {
+export interface UserData {
   email: string
 }
 
@@ -50,22 +50,29 @@ export const useAuth = () => {
     const token = response.data.token
     setToken(token)
     setUser && setUser({
+      ...user,
       email
     })
   }
 
+  async function signup ({ email, password }: LoginProps) {
+    await reqSignUp({ email, password })
+  }
+
   async function postVerify (user: UserData) {
-    setUser && setUser({
-      email: user.email
-    })
+    setUser && setUser(user)
   }
 
   async function logout () {
     // Based on this article, JWT token cannot be manually set to expire
     // on the server, so we just have to clear the client side authentication.
     // https://medium.com/devgorilla/how-to-log-out-when-using-jwt-a8c7823e8a6
+    // Q: Why async function but nothing to await?
+    // A: Just treating logout as a asynchronous process like login,
+    // so it's easy to refactor later if logout needed to be async.
     clearToken()
     setUser && setUser({
+      ...user,
       email: ''
     })
     return true
@@ -75,6 +82,7 @@ export const useAuth = () => {
     user,
     isLogin,
     login,
+    signup,
     logout,
     postVerify
   }

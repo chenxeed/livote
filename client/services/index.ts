@@ -3,4 +3,4 @@ const serverPort = process.env.SERVER_PORT
   ? `:${process.env.SERVER_PORT}`
   : ''
 export const serverUrl = `${serverHost}${serverPort}`
-export const authTokenKey: string = process.env.AUTH_TOKEN_KEY || 'defaultLivoteSecret'
+export const authTokenKey = process.env.AUTH_TOKEN_KEY || 'defaultLivoteSecret'

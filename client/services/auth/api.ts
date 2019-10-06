@@ -1,6 +1,14 @@
 import { serverUrl } from '..'
 import axios from 'axios'
 
+
+interface SignUpParam {
+  email: string,
+  password: string
+}
+interface SignUpResponse {
+  success: string
+}
 interface LoginParam {
   email: string,
   password: string
@@ -9,6 +17,22 @@ interface LoginResponse {
   success: string,
   token: string
 }
+
+export const reqSignUp = ({ email, password }: SignUpParam) => {
+  return axios.request<SignUpResponse>({
+    method: 'POST',
+    url: `${serverUrl}/user/signup`,
+    data: {
+      email,
+      password
+    },
+    responseType: 'json',
+    headers: {
+      'content-type': 'application/json'
+    }
+  })
+}
+
 export const reqLogin = ({ email, password }: LoginParam) => {
   return axios.request<LoginResponse>({
     method: 'POST',
