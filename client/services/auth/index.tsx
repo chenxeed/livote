@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, FunctionComponent, Dispatch, SetStateAction } from 'react'
 import { NextPageContext } from 'next'
+import Router from 'next/router'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import { reqLogin, reqVerify, reqSignUp } from './api'
@@ -75,7 +76,7 @@ export const useAuth = () => {
       ...user,
       email: ''
     })
-    return true
+    Router.push('/')
   }
 
   return {
