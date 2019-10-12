@@ -1,4 +1,5 @@
 import { FunctionComponent, useState, Fragment } from 'react'
+import Link from 'next/link'
 import { useAuth } from '../../services/auth'
 
 export const LayoutHeader: FunctionComponent = () => {
@@ -12,9 +13,11 @@ export const LayoutHeader: FunctionComponent = () => {
   }
 
   return <nav className="sticky top-0 z-20 flex items-center justify-between shadow flex-wrap bg-gray-100 p-6">
-  <div className="flex items-center flex-shrink-0 mr-6">
-    <span className="font-semibold text-xl tracking-tight">Livote</span>
-  </div>
+  <Link href='/'>
+    <div className="flex items-center flex-shrink-0 mr-6 cursor-pointer">
+      <span className="font-semibold text-xl tracking-tight">Livote</span>
+    </div>
+  </Link>
   <div className="block lg:hidden">
     <button
       className="flex items-center px-3 py-2 border rounded"
@@ -30,19 +33,22 @@ export const LayoutHeader: FunctionComponent = () => {
     <div className="text-sm lg:flex-grow">
       { isLogin
         ? <Fragment>
-            <a href="/votes" className="block mt-4 lg:inline-block lg:mt-0 mr-4">
-              Votes
-            </a>
+            <Link href="/votes">
+              <a className="block mt-4 lg:inline-block lg:mt-0 mr-4">
+                Votes
+              </a>
+            </Link>
             <button
               className="block mt-4 lg:inline-block lg:mt-0"
               onClick={ logout }>
               Logout
             </button>
           </Fragment> 
-      : <a href="/" className="block mt-4 lg:inline-block lg:mt-0 mr-4">
-          Login
-        </a>
-      
+      : <Link href="/">
+          <a className="block mt-4 lg:inline-block lg:mt-0 mr-4">
+            Login
+          </a>
+        </Link>
       }
     </div>
     <div>
