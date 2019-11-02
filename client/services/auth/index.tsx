@@ -1,10 +1,8 @@
 import { createContext, useContext, useState, FunctionComponent, Dispatch, SetStateAction } from 'react'
 import { NextPageContext } from 'next'
 import Router from 'next/router'
-import nextCookie from 'next-cookies'
-import cookie from 'js-cookie'
 import { reqLogin, reqVerify, reqSignUp } from './api'
-import { authTokenKey } from '../'
+import { tokenManager } from '../token'
 
 export interface UserData {
   email: string
@@ -12,7 +10,7 @@ export interface UserData {
 
 interface AuthContextValue {
   user: UserData,
-  setUser: Dispatch<SetStateAction<UserData>> | null
+  setUser?: Dispatch<SetStateAction<UserData>>
 }
 
 interface LoginProps {
@@ -24,14 +22,20 @@ const AuthContext = createContext<AuthContextValue>({
   user: {
     email: ''
   },
-  setUser: null
+  setUser: undefined
 })
 
-export const AuthProvider: FunctionComponent = ({
-  children
+interface AuthProviderContext {
+  context: {
+    user?: UserData
+  }
+}
+export const AuthProvider: FunctionComponent<AuthProviderContext> = ({
+  children,
+  context
 }) => {
   const [user, setUser] = useState({
-    email: ''
+    email: (context.user && context.user.email) || ''
   })
 
   return <AuthContext.Provider value={{
@@ -49,7 +53,7 @@ export const useAuth = () => {
   async function login ({ email, password }: LoginProps) {
     const response = await reqLogin({ email, password })
     const token = response.data.token
-    setToken(token)
+    tokenManager.set(token)
     setUser && setUser({
       ...user,
       email
@@ -60,10 +64,6 @@ export const useAuth = () => {
     await reqSignUp({ email, password })
   }
 
-  async function postVerify (user: UserData) {
-    setUser && setUser(user)
-  }
-
   async function logout () {
     // Based on this article, JWT token cannot be manually set to expire
     // on the server, so we just have to clear the client side authentication.
@@ -71,7 +71,7 @@ export const useAuth = () => {
     // Q: Why async function but nothing to await?
     // A: Just treating logout as a asynchronous process like login,
     // so it's easy to refactor later if logout needed to be async.
-    clearToken()
+    tokenManager.clear()
     setUser && setUser({
       ...user,
       email: ''
@@ -84,13 +84,12 @@ export const useAuth = () => {
     isLogin,
     login,
     signup,
-    logout,
-    postVerify
+    logout
   }
 }
 
-export async function verify (ctx: NextPageContext) {
-  const token = getToken(ctx)
+export async function verify (ctx?: NextPageContext) {
+  const token = tokenManager.get(ctx)
   if (token) {
     try {
       const response = await reqVerify(token)
@@ -104,18 +103,4 @@ export async function verify (ctx: NextPageContext) {
   } else {
     return false
   }
-}
-
-function setToken (token: string) {
-  cookie.set(authTokenKey, token, {
-    expires: 1
-  })
-}
-
-function clearToken () {
-  cookie.remove(authTokenKey)
-}
-
-function getToken (ctx: NextPageContext) {
-  return nextCookie(ctx)[authTokenKey]
 }
