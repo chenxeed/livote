@@ -2,12 +2,12 @@ import { FunctionComponent } from 'react'
 import { render } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import flushPromises from 'flush-promises'
-import CONSTANT from '../../tests/mocks/constants' 
+import CONSTANT from '../../tests/constants' 
 import { AuthProvider, useAuth } from '.'
 
 describe('Service - Auth', () => {
 
-  it('should be able to login and get user detail', async done => {
+  test('login and get user detail', async done => {
     // SETUP
     // prepare the child component as the consumer of AuthProvider
     const testAuth = {
@@ -15,12 +15,13 @@ describe('Service - Auth', () => {
       password: CONSTANT.password
     }
     const Child: FunctionComponent = () => {
-      const { user, login } = useAuth()
+      const { user, isLogin, login } = useAuth()
       const doLogin = () => {
         login(testAuth)
       }
       return <div>
         <div id="user">{JSON.stringify(user)}</div>
+        <div id="isLogin">{ `${isLogin}` }</div>
         <button id="login" onClick={ doLogin } >Login</button>
       </div>
     }
@@ -38,6 +39,7 @@ describe('Service - Auth', () => {
     // ASSERT
     // check if the user email is empty first
     const user = container.querySelector('#user')
+    const isLogin = container.querySelector('#isLogin')
     expect(user && user.innerHTML).toEqual(JSON.stringify({
       email: ''
     }))
@@ -54,6 +56,7 @@ describe('Service - Auth', () => {
     await flushPromises()
     // ASSERT
     // check if the user logged-in and user data exist now
+    expect(isLogin && isLogin.innerHTML).toBe("true")
     expect(user && user.innerHTML).toEqual(JSON.stringify({
       email: testAuth.email
     }))
@@ -61,5 +64,4 @@ describe('Service - Auth', () => {
     // CLEANUP
     done()
   })
-
 })
