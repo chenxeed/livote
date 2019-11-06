@@ -12,7 +12,7 @@ export const LayoutHeader: FunctionComponent = () => {
     setShowMenu(toShow)
   }
 
-  return <nav className="sticky top-0 z-20 flex items-center justify-between shadow flex-wrap bg-gray-100 p-6">
+  return <nav className="sticky top-0 z-20 flex items-center justify-between shadow flex-wrap bg-gray-100 p-6 mb-5">
   <Link href='/'>
     <div className="flex items-center flex-shrink-0 mr-6 cursor-pointer">
       <span className="font-semibold text-xl tracking-tight">Livote</span>
