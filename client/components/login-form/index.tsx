@@ -1,5 +1,6 @@
 import { FunctionComponent, FormEvent, useState, SyntheticEvent, Fragment } from 'react'
 import { useAuth } from '../../services/auth'
+import { InputText, Button } from '../form'
 
 enum Mode {
   LOGIN,
@@ -77,29 +78,23 @@ export const LoginForm: FunctionComponent = () => {
         }
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-          Email
-        </label>
-        <input
+        <InputText
+          label="Email"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           name="email"
-          type="text"
+          type="email"
           placeholder="Your favourite e-mail"/>
       </div>
       <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-          Password
-        </label>
-        <input
+        <InputText
+          label="Password"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
           name="password"
           type="password"
           placeholder="******************"/>
       </div>
       <div className="flex items-center justify-between">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          Sign In
-        </button>
+        <Button type="submit">Sign In</Button>
         <span>
           <a
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
@@ -121,29 +116,23 @@ export const LoginForm: FunctionComponent = () => {
         }
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-          Email
-        </label>
-        <input
+        <InputText
+          label="Email"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           name="email"
-          type="text"
+          type="email"
           placeholder="Your favourite e-mail"/>
       </div>
       <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-          Password
-        </label>
-        <input
+        <InputText
+          label="Password"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
           name="password"
           type="password"
           placeholder="******************"/>
       </div>
       <div className="flex items-center justify-between">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          Sign Up
-        </button>
+        <Button type="submit">Sign Up</Button>
         <span>
           <a
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
