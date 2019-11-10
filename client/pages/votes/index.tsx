@@ -1,4 +1,5 @@
 import { NextPage } from 'next'
+import Link from 'next/link'
 import { LayoutGeneral } from '../../layout/general'
 import { LayoutHeader } from '../../layout/header'
 import { PageTitle } from '../../components/page-title'
@@ -22,24 +23,30 @@ const PageWrapper: NextPage<VotePageProps> = props => {
 const PageContent: NextPage<VotePageProps> = ({ votes }) => {
   return <div className="w-full h-full mx-auto">
     <PageTitle>Votes</PageTitle>
-    <table className="table-auto mx-auto">
-      <thead>
-        <tr>
-          <th className="px-4 py-2">Title</th>
-          <th className="px-4 py-2">Description</th>
-          <th className="px-4 py-2">Lists</th>
-        </tr>
-      </thead>
-      <tbody>
-        { votes.map((vote: any) => {
-          return <tr key={ vote._id }>
-            <td className="border px-4 py-2">{ vote.title }</td>
-            <td className="border px-4 py-2">{ vote.description }</td>
-            <td className="border px-4 py-2">See list</td>
-          </tr>
-        })}
-      </tbody>
-    </table>
+    <div className="mx-auto">
+      { votes && votes.length ?
+        <table className="table-auto">
+          <thead>
+            <tr>
+              <th className="px-4 py-2">Title</th>
+              <th className="px-4 py-2">Description</th>
+              <th className="px-4 py-2">Lists</th>
+            </tr>
+          </thead>
+          <tbody>
+            { votes.map((vote: any) => {
+              return <tr key={ vote._id }>
+                <td className="border px-4 py-2">{ vote.title }</td>
+                <td className="border px-4 py-2">{ vote.description }</td>
+                <td className="border px-4 py-2">See list</td>
+              </tr>
+            })}
+          </tbody>
+        </table>
+      :
+        <div className="text-center">No votes yet, please <Link href="/votes/add"><a>create one</a></Link></div>
+      }
+    </div>
   </div>
 
 }
