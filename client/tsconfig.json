@@ -21,7 +21,14 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths" : {
+      "@components/*" : [ "components/*" ],
+      "@services/*" : [ "services/*" ],
+      "@layout/*" : [ "layout/*" ],
+      "@rootTypes/*" : [ "../types/*" ]
+    }
   },
   "exclude": [
     "node_modules"
