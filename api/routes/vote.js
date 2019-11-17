@@ -11,9 +11,7 @@ const router = express.Router()
 // Read
 router.get('/all', ServiceAuth.getUserAuth(true), async (req, res) => {
   const votes = await ModelVote.find({}).exec()
-  return res.status(200).json({
-    votes
-  })
+  return res.status(200).json(votes)
 })
 
 // Create
