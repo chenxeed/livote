@@ -8,6 +8,7 @@ import { AuthProvider, verify } from '@services/auth'
 import { getAllVotes, createVote } from '@services/votes'
 import { PageProps } from '../../types'
 import { FormEvent, useState } from 'react'
+import { form2js } from 'form2js'
 
 interface VotePageProps extends PageProps {
   votes: any
@@ -25,15 +26,12 @@ const PageWrapper: NextPage<VotePageProps> = props => {
 const PageContent: NextPage<VotePageProps> = () => {
 
   const [alertMessage, setAlertMessage] = useState<[boolean, AlertType, string]>([false, AlertType.INFO, ''])
+  const [listCount, setListCount] = useState<number>(0)
 
   async function onSubmit (e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const elements = e.currentTarget.elements as unknown as HTMLInputElement[] | HTMLTextAreaElement[]
-    const data = {
-      title: elements[0].value,
-      description: elements[1].value,
-      lists: []
-    }
+    const form = e.currentTarget
+    const data = form2js(form)
     try {
       await createVote(data)
       setAlertMessage([true, AlertType.SUCCESS, 'Successfully created new vote!'])
@@ -41,7 +39,21 @@ const PageContent: NextPage<VotePageProps> = () => {
       const message = e.message || 'Failed to create new vote, please try again'
       setAlertMessage([true, AlertType.DANGER, message])
     }
+  }
 
+  function renderListCount () {
+    let listForm: JSX.Element[] = []
+    for (let i=0; i<listCount; i++) {
+      listForm.push(<div className="mb-4" key={i}>
+        <InputText
+          name={ `lists[${i}].title` }
+          label="Title"/>
+        <InputTextarea
+          name={ `lists[${i}].description` }
+          label="Description"/>
+      </div>)
+    }
+    return listForm
   }
 
   return <div className="w-full h-full mx-auto">
@@ -50,14 +62,20 @@ const PageContent: NextPage<VotePageProps> = () => {
       <div className="mb-6">
         { alertMessage[0] && <Alert type={ alertMessage[1] }>{ alertMessage[2] }</Alert> }
       </div>
-      <form onSubmit={ onSubmit }>
+      <form method="POST" onSubmit={ onSubmit }>
         <InputText
           name="title"
           label="Title"/>
         <InputTextarea
           name="description"
           label="Description"/>
-        <Button>Submit</Button>
+        <div className="mb-4">
+          <Button type="button" onClick={() => setListCount(listCount+1)}>+</Button>
+          { listCount ? renderListCount() : null }
+        </div>
+        <div className="mb-6">
+          <Button>Submit</Button>
+        </div>
       </form>
     </div>
   </div>

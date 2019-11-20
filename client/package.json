@@ -23,6 +23,7 @@
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "flush-promises": "^1.0.2",
+    "form2js": "^1.0.0",
     "js-cookie": "^2.2.1",
     "next": "^9.0.2",
     "next-cookies": "^1.1.3",
