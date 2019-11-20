@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react"
 
 interface AlertProps {
   type: AlertType
@@ -16,6 +16,11 @@ const typeToColor = {
   'warning': 'orange',
   'danger': 'red',
   'success': 'teal'
+}
+
+export function useAlert () {
+  const [alertMessage, setAlertMessage] = useState<[boolean, AlertType, string]>([false, AlertType.INFO, ''])
+  return { alertMessage, setAlertMessage }
 }
 
 export const Alert: FunctionComponent<AlertProps> = props => {

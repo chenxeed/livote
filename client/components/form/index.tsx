@@ -1,4 +1,7 @@
-import { FunctionComponent, InputHTMLAttributes, TextareaHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes } from "react"
+import {
+  FunctionComponent,
+  InputHTMLAttributes, TextareaHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes
+} from "react"
 
 interface Props {
   label?: string

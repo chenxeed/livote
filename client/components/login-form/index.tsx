@@ -1,7 +1,7 @@
 import { FunctionComponent, FormEvent, useState, SyntheticEvent, Fragment } from 'react'
 import { useAuth } from '../../services/auth'
 import { InputText, Button } from '../form'
-import { Alert, AlertType } from '../alert'
+import { Alert, useAlert, AlertType } from '../alert'
 
 enum Mode {
   LOGIN,
@@ -10,7 +10,7 @@ enum Mode {
 
 export const LoginForm: FunctionComponent = () => {
   
-  const [alertMessage, setAlertMessage] = useState<[boolean, AlertType, string]>([false, AlertType.INFO, ''])
+  const { alertMessage, setAlertMessage } = useAlert()
   const [mode, setMode] = useState(Mode.LOGIN)
   const { login, signup } = useAuth()
 
