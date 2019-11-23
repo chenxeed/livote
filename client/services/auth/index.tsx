@@ -1,21 +1,38 @@
 import { createContext, useContext, useState, FunctionComponent, Dispatch, SetStateAction } from 'react'
 import { NextPageContext } from 'next'
+import axios from 'axios'
 import Router from 'next/router'
-import { reqLogin, reqVerify, reqSignUp } from './api'
+import { serverUrl } from '..'
 import { tokenManager } from '../token'
+import { User } from '@rootTypes/user'
 
-export interface UserData {
-  email: string
+interface SignUpParam {
+  email: User['email'],
+  password: User['password']
 }
-
+interface SignUpResponse {
+  success: string
+}
+interface LoginParam {
+  email: User['email'];
+  password: User['password'];
+}
+interface LoginResponse {
+  success: string,
+  token: string
+}
+export interface UserData {
+  email: User['email']
+}
 interface AuthContextValue {
   user: UserData,
   setUser?: Dispatch<SetStateAction<UserData>>
 }
-
-interface LoginProps {
-  email: string;
-  password: string;
+interface VerifyResponse {
+  success: string;
+  user: {
+    email: string
+  }
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -50,8 +67,19 @@ export const useAuth = () => {
   const {user, setUser} = useContext(AuthContext)
   const isLogin = Boolean(user && user.email)
 
-  async function login ({ email, password }: LoginProps) {
-    const response = await reqLogin({ email, password })
+  async function login ({ email, password }: LoginParam) {
+    const response = await axios.request<LoginResponse>({
+      method: 'POST',
+      url: `${serverUrl}/user/signin`,
+      data: {
+        email,
+        password
+      },
+      responseType: 'json',
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
     const token = response.data.token
     tokenManager.set(token)
     setUser && setUser({
@@ -60,8 +88,19 @@ export const useAuth = () => {
     })
   }
 
-  async function signup ({ email, password }: LoginProps) {
-    await reqSignUp({ email, password })
+  async function signup ({ email, password }: SignUpParam) {
+    await axios.request<SignUpResponse>({
+      method: 'POST',
+      url: `${serverUrl}/user/signup`,
+      data: {
+        email,
+        password
+      },
+      responseType: 'json',
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
   }
 
   async function logout () {
@@ -92,7 +131,15 @@ export async function verify (ctx?: NextPageContext) {
   const token = tokenManager.get(ctx)
   if (token) {
     try {
-      const response = await reqVerify(token)
+      const response = await axios.request<VerifyResponse>({
+        method: 'GET',
+        url: `${serverUrl}/user/verify-auth`,
+        responseType: 'json',
+        headers: {
+          'content-type': 'application/json',
+          'authorization': token
+        }
+      })
       const user = response.data.user
       return {
         user
