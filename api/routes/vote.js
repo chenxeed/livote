@@ -41,5 +41,21 @@ router.post('/create', ServiceAuth.getUserAuth(true), async (req, res) => {
   }
 })
 
+// Delete
+router.post('delete/:id', ServiceAuth.getUserAuth(true), async (req, res) => {
+  const id = req.params.id
+  try {
+    const vote = await ModelVote.findByIdAndDelete(req.params.id)
+    return res.status(200).json({
+      success: `Vote ${id} has been deleted`,
+      id
+    })
+  } catch (e) {
+    return res.status(500).json({
+      error: 'failed to delete the vote ' + id
+    })
+  }
+})
+
 // Module Export
 module.exports = router
