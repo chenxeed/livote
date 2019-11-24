@@ -37,7 +37,9 @@ export const InputTextarea: FunctionComponent<TextareaProps> = props => {
 }
 
 export const Button: FunctionComponent<ButtonProps> = props => {
+  const { className, ...other } = props
+  const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`
   return <button
-    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-    {...props}>{ props.children }</button>
+    className={ buttonClass + (props.className ? ` ${props.className}` : '') }
+    {...other}>{ props.children }</button>
 }
