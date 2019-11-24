@@ -3,7 +3,7 @@ import { LayoutGeneral } from '@layout/general'
 import { LayoutHeader } from '@layout/header'
 import { PageTitle } from '@components/page-title'
 import { InputText, InputTextarea, Button } from '@components/form'
-import { AlertType, Alert } from '@components/alert'
+import { AlertType, Alert, useAlert } from '@components/alert'
 import { AuthProvider, verify } from '@services/auth'
 import { getAllVotes, createVote } from '@services/votes'
 import { PageProps } from '../../types'
@@ -25,7 +25,7 @@ const PageWrapper: NextPage<VotePageProps> = props => {
 
 const PageContent: NextPage<VotePageProps> = () => {
 
-  const [alertMessage, setAlertMessage] = useState<[boolean, AlertType, string]>([false, AlertType.INFO, ''])
+  const {alertMessage, setAlertMessage} = useAlert()
   const [listCount, setListCount] = useState<number>(0)
 
   async function onSubmit (e: FormEvent<HTMLFormElement>) {

@@ -5,34 +5,49 @@ import { LayoutGeneral } from '@layout/general'
 import { LayoutHeader } from '@layout/header'
 import { PageTitle } from '@components/page-title'
 import { Button } from '@components/form'
+import { AlertType, Alert, useAlert } from '@components/alert'
 import { AuthProvider, verify } from '@services/auth'
-import { getAllVotes } from '@services/votes'
+import { useVoteState, getAllVotes, deleteVote } from '@services/votes'
 import { PageProps } from '../types'
 import { Vote } from '@rootTypes/vote'
 
 interface VotePageProps extends PageProps {
-  votes: Vote[]
+  preloadVotes: Vote[]
 }
 
 const PageWrapper: NextPage<VotePageProps> = props => {
 
   return <AuthProvider context={{ user: props.user }}>
     <LayoutGeneral header={ <LayoutHeader/> }>
-      <PageContent votes={ props.votes }/>
+      <PageContent preloadVotes={ props.preloadVotes }/>
     </LayoutGeneral>
   </AuthProvider>
 }
 
-const PageContent: NextPage<VotePageProps> = ({ votes }) => {
+const PageContent: NextPage<VotePageProps> = ({ preloadVotes }) => {
 
+  const {alertMessage, setAlertMessage} = useAlert()
   const [viewList, setViewList] = useState<Vote['_id'] | undefined>(undefined)
+  const [votes, dispatchVotes] = useVoteState(preloadVotes)
 
   function showVoteList (voteId: Vote['_id']) {
     setViewList(viewList === voteId ? undefined : voteId)
   }
 
+  async function clickDeleteVote (voteId: Vote['_id'], voteTitle: Vote['title']) {
+    await deleteVote(voteId)
+    dispatchVotes({
+      type: 'delete',
+      id: voteId
+    })
+    setAlertMessage([true, AlertType.SUCCESS, `Vote "${voteTitle}" deleted successfully`])
+  }
+
   return <div className="w-full h-full">
     <PageTitle>Votes</PageTitle>
+    <div className="mb-6">
+      { alertMessage[0] && <Alert type={ alertMessage[1] }>{ alertMessage[2] }</Alert> }
+    </div>
     <div className="container mx-auto">
       { votes && votes.length ?
         <table className="table-auto w-full">
@@ -49,9 +64,12 @@ const PageContent: NextPage<VotePageProps> = ({ votes }) => {
                 <tr key={ vote._id }>
                   <td className="border px-4 py-2">{ vote.title }</td>
                   <td className="border px-4 py-2">{ vote.description }</td>
-                  <td className="border px-4 py-2">
-                    <Button onClick={ () => showVoteList(vote._id) }>
+                  <td className="border px-4 py-2 flex justify-center">
+                    <Button className="mx-2" onClick={ () => showVoteList(vote._id) }>
                       { viewList === vote._id ? `Hide List` : `Show List` }
+                    </Button>
+                    <Button className="mx-2" onClick={ () => clickDeleteVote(vote._id, vote.title) }>
+                      Delete
                     </Button>
                   </td>
                 </tr>
@@ -97,7 +115,7 @@ PageWrapper.getInitialProps = async (ctx): Promise<VotePageProps> => {
   const votes = await getAllVotes(ctx)
   return {
     user: checkAuth ? checkAuth.user : undefined,
-    votes
+    preloadVotes: votes
   }
 }
 
