@@ -97,7 +97,7 @@ const PageContent: NextPage<VotePageProps> = ({ preloadVotes }) => {
             })}
             <tr>
               <td colSpan={ 3 }>
-                <Link href="/votes/add"><Button>+</Button></Link>
+                <Link href="/votes/create"><Button>+</Button></Link>
               </td>
             </tr>
           </tbody>

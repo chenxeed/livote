@@ -5,25 +5,21 @@ import { PageTitle } from '@components/page-title'
 import { InputText, InputTextarea, Button } from '@components/form'
 import { AlertType, Alert, useAlert } from '@components/alert'
 import { AuthProvider, verify } from '@services/auth'
-import { getAllVotes, createVote } from '@services/votes'
+import { createVote } from '@services/votes'
 import { PageProps } from '../../types'
 import { FormEvent, useState } from 'react'
 import { form2js } from 'form2js'
 
-interface VotePageProps extends PageProps {
-  votes: any
-}
-
-const PageWrapper: NextPage<VotePageProps> = props => {
+const PageWrapper: NextPage<PageProps> = props => {
 
   return <AuthProvider context={{ user: props.user }}>
     <LayoutGeneral header={ <LayoutHeader/> }>
-      <PageContent votes={ props.votes }/>
+      <PageContent/>
     </LayoutGeneral>
   </AuthProvider>
 }
 
-const PageContent: NextPage<VotePageProps> = () => {
+const PageContent: NextPage<PageProps> = () => {
 
   const {alertMessage, setAlertMessage} = useAlert()
   const [listCount, setListCount] = useState<number>(0)
@@ -82,12 +78,10 @@ const PageContent: NextPage<VotePageProps> = () => {
 
 }
 
-PageWrapper.getInitialProps = async (ctx): Promise<VotePageProps> => {
+PageWrapper.getInitialProps = async (ctx): Promise<PageProps> => {
   const checkAuth = await verify(ctx)
-  const votes = await getAllVotes(ctx)
   return {
-    user: checkAuth ? checkAuth.user : undefined,
-    votes
+    user: checkAuth ? checkAuth.user : undefined
   }
 }
 
