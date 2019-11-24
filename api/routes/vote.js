@@ -42,13 +42,14 @@ router.post('/create', ServiceAuth.getUserAuth(true), async (req, res) => {
 })
 
 // Delete
-router.post('delete/:id', ServiceAuth.getUserAuth(true), async (req, res) => {
-  const id = req.params.id
+router.delete('/delete', ServiceAuth.getUserAuth(true), async (req, res) => {
+  const id = req.body.id
   try {
-    const vote = await ModelVote.findByIdAndDelete(req.params.id)
+    const vote = await ModelVote.findByIdAndDelete(id).exec()
     return res.status(200).json({
       success: `Vote ${id} has been deleted`,
-      id
+      id,
+      vote
     })
   } catch (e) {
     return res.status(500).json({
