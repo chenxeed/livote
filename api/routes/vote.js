@@ -58,5 +58,30 @@ router.delete('/delete', ServiceAuth.getUserAuth(true), async (req, res) => {
   }
 })
 
+// Update
+router.put('/update', ServiceAuth.getUserAuth(true), async(req, res) => {
+  const body = req.body
+  const id = body.id
+  try {
+    const vote = ModelVote.findById(id)
+    if (body.title) {
+      vote.title = body.title
+    }
+    if (body.description) {
+      vote.description = body.description
+    }
+    await vote.save()
+    return res.status(200).json({
+      success: `Vote ${id} has been modified`,
+      id,
+      vote
+    })
+  } catch(e) {
+    return res.status(500).json({
+      error: 'failed to update the vote ' + id
+    })
+  }
+})
+
 // Module Export
 module.exports = router
