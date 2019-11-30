@@ -22,6 +22,13 @@ app
       app.render(req, res, actualPage)
     })
 
+    server.get('/votes/update/:id', (req, res) => {
+      const actualPage = '/votes/update'
+      app.render(req, res, actualPage, {
+        id: req.params.id
+      })
+    })
+
     server.get('*', (req, res) => {
       return handle(req, res)
     })

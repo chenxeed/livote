@@ -1,6 +1,8 @@
 import {
   FunctionComponent,
-  InputHTMLAttributes, TextareaHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes
+  InputHTMLAttributes, TextareaHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes,
+  forwardRef,
+  ForwardRefExoticComponent
 } from "react"
 
 interface Props {
@@ -36,10 +38,10 @@ export const InputTextarea: FunctionComponent<TextareaProps> = props => {
   </div>
 }
 
-export const Button: FunctionComponent<ButtonProps> = props => {
+export const Button: ForwardRefExoticComponent<ButtonProps>  = forwardRef(props => {
   const { className, ...other } = props
   const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`
   return <button
     className={ buttonClass + (props.className ? ` ${props.className}` : '') }
     {...other}>{ props.children }</button>
-}
+})

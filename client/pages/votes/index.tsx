@@ -68,6 +68,11 @@ const PageContent: NextPage<VotePageProps> = ({ preloadVotes }) => {
                     <Button className="mx-2" onClick={ () => showVoteList(vote._id) }>
                       { viewList === vote._id ? `Hide List` : `Show List` }
                     </Button>
+                    <Link href={ `/votes/update/${vote._id}` }>
+                      <Button className="mx-2">
+                        Update
+                      </Button>
+                    </Link>
                     <Button className="mx-2" onClick={ () => clickDeleteVote(vote._id, vote.title) }>
                       Delete
                     </Button>

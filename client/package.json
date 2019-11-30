@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production next",
+    "start": "NODE_ENV=production node server.js",
     "test:unit": "jest --config=jest.config.js"
   },
   "browserslist": [
